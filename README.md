@@ -4,13 +4,15 @@
 
 ## Cài đặt
 
-1.  Tạo môi trường ảo (khuyến khích):
+1. Tạo môi trường ảo (khuyến khích):
+
     ```bash
     python -m venv venv
     .\venv\Scripts\activate
     ```
 
-2.  Cài đặt các thư viện:
+2. Cài đặt các thư viện:
+
     ```bash
     npm install # (Nếu bạn dùng nodejs, nhưng đây là python)
     pip install -r requirements.txt
@@ -26,11 +28,11 @@ uvicorn app.main:app --reload
 
 ## Cấu trúc thư mục
 
-*   `app/main.py`: Điểm khởi chạy của ứng dụng.
-*   `app/api/endpoints/`: Chứa các endpoint API (logic xử lý).
-*   `app/schemas/`: Chứa các Pydantic models (dữ liệu đầu vào/ra).
-*   `app/core/`: Cấu hình chung của dự án.
-*   `app/models/`: Chứa các model tương tác với Database (nếu có).
+* `app/main.py`: Điểm khởi chạy của ứng dụng.
+* `app/api/endpoints/`: Chứa các endpoint API (logic xử lý).
+* `app/schemas/`: Chứa các Pydantic models (dữ liệu đầu vào/ra).
+* `app/core/`: Cấu hình chung của dự án.
+* `app/models/`: Chứa các model tương tác với Database (nếu có).
 
 ## Sử dụng
 
@@ -42,17 +44,20 @@ Phần này hướng dẫn cách tạo bảng trong database thông qua Code (Mo
 
 ### 1. Cấu hình Database
 
-1.  Tạo file `.env` tại thư mục gốc (nếu chưa có) và thêm cấu hình kết nối database.
+1. Tạo file `.env` tại thư mục gốc (nếu chưa có) và thêm cấu hình kết nối database.
     Ví dụ cho SQLite (dễ nhất để test):
+
     ```env
     DATABASE_URL=sqlite:///./sql_app.db
     ```
+
     Hoặc PostgreSQL:
+
     ```env
     DATABASE_URL=postgresql://user:password@localhost/dbname
     ```
 
-2.  Cấu hình Database Engine đã được thiết lập sẵn tại `app/core/database.py`.
+2. Cấu hình Database Engine đã được thiết lập sẵn tại `app/core/database.py`.
     File này sẽ đọc `DATABASE_URL` từ file `.env` và tạo kết nối.
 
 ### 2. Cài đặt thư viện cần thiết

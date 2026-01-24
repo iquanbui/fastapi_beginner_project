@@ -1,8 +1,8 @@
 from app.api.endpoints import users
 from fastapi import FastAPI
-from app.core import config
+from app.core.config import settings
 
-app = FastAPI(title=config.PROJECT_NAME, version=config.PROJECT_VERSION)
+app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
 
 # Include routers
 

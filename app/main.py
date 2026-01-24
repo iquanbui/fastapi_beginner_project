@@ -1,10 +1,12 @@
+from app.api.endpoints import users
 from fastapi import FastAPI
 from app.core import config
 
 app = FastAPI(title=config.PROJECT_NAME, version=config.PROJECT_VERSION)
 
 # Include routers
-# app.include_router(router, prefix="/api/v1/resource", tags=["resource"])
+
+app.include_router(users.router, prefix="/users", tags=["users"])
 
 
 @app.get("/")

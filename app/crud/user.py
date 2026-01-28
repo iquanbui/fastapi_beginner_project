@@ -1,13 +1,16 @@
 from sqlalchemy.orm import Session
 from app.models.user import Users
 from app.schemas.user import UserCreate, UserUpdate
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from app.core import security
 
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+def authenticate_user(db: Session, email: str, password: str):
+    user = get_user_by_email(db, email=email)
+    if not user:
+        return None
+    if not security.verify_password(password, user.hashed_password):
+        return None
+    return user
 
 
 def get_user(db: Session, user_id: int):
@@ -23,7 +26,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: UserCreate):
-    hashed_password = get_password_hash(user.password)
+    hashed_password = security.get_password_hash(user.password)
     db_user = Users(email=user.email, hashed_password=hashed_password)
     db.add(db_user)
     db.commit()
@@ -38,7 +41,7 @@ def update_user(db: Session, user_id: int, user_update: UserUpdate):
 
     update_data = user_update.model_dump(exclude_unset=True)
     if "password" in update_data:
-        update_data["hashed_password"] = get_password_hash(
+        update_data["hashed_password"] = security.get_password_hash(
             update_data.pop("password"))
 
     for key, value in update_data.items():

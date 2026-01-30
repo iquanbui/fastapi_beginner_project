@@ -113,3 +113,26 @@ alembic revision --autogenerate -m "them bang users"
 ```bash
 alembic upgrade head
 ```
+
+## Hướng dẫn Testing
+
+Dự án sử dụng `pytest` làm framework kiểm thử chính.
+
+### 1. Cài đặt
+
+Nếu đã chạy `pip install -r requirements.txt`, bạn đã có đủ thư viện (`pytest`, `httpx`).
+
+### 2. Chạy Test
+
+Chạy toàn bộ test cases trong thư mục `tests/`:
+
+```bash
+pytest
+# Hoặc
+python -m pytest
+```
+
+### 3. Cấu hình Test
+
+*   File cấu hình: `pytest.ini` (ở thư mục gốc).
+*   Test Database: Khi chạy test, hệ thống sẽ tự động tạo file `test.db` riêng biệt, không ảnh hưởng đến dữ liệu chính của bạn. Dữ liệu trong `test.db` mặc định sẽ bị xóa sau khi test xong (có thể chỉnh trong `tests/conftest.py`).

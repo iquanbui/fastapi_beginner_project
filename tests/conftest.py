@@ -29,7 +29,7 @@ def db() -> Generator:
     finally:
         db.close()
         # Xóa bảng sau khi test xong (nếu muốn sạch sẽ hoàn toàn thì uncomment dòng dưới)
-        Base.metadata.drop_all(bind=engine)
+        # Base.metadata.drop_all(bind=engine)
 
 
 @pytest.fixture(scope="module")

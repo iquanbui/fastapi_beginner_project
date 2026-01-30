@@ -9,3 +9,5 @@ passlib[bcrypt]
 email-validator
 python-jose[cryptography]
 python-multipart
+pytest
+httpx

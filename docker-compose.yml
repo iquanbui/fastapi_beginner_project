@@ -12,6 +12,7 @@ services:
       - DATABASE_URL=sqlite:////code/sql_app.db
     volumes:
       - ./sql_app.db:/code/sql_app.db
+      - ./app:/code/app
     depends_on:
       - redis
 

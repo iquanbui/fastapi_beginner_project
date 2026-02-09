@@ -1,3 +1,4 @@
+from app.core.middleware import ProcessTimeMiddleware
 from contextlib import asynccontextmanager
 from app.api.endpoints import users, auth
 from fastapi import FastAPI, Depends
@@ -15,6 +16,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title=settings.PROJECT_NAME,
               version=settings.PROJECT_VERSION, lifespan=lifespan)
+
+# Add Middleware
+app.add_middleware(ProcessTimeMiddleware)
 
 
 @app.get("/redis-health")

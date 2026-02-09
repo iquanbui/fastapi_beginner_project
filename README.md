@@ -134,5 +134,49 @@ python -m pytest
 
 ### 3. Cấu hình Test
 
-*   File cấu hình: `pytest.ini` (ở thư mục gốc).
-*   Test Database: Khi chạy test, hệ thống sẽ tự động tạo file `test.db` riêng biệt, không ảnh hưởng đến dữ liệu chính của bạn. Dữ liệu trong `test.db` mặc định sẽ bị xóa sau khi test xong (có thể chỉnh trong `tests/conftest.py`).
+* File cấu hình: `pytest.ini` (ở thư mục gốc).
+* Test Database: Khi chạy test, hệ thống sẽ tự động tạo file `test.db` riêng biệt, không ảnh hưởng đến dữ liệu chính của bạn. Dữ liệu trong `test.db` mặc định sẽ bị xóa sau khi test xong (có thể chỉnh trong `tests/conftest.py`).
+
+## Hướng dẫn Redis
+
+Dự án đã được tích hợp Redis.
+
+### 1. Cấu hình
+
+Redis được cấu hình trong file `.env`:
+
+```env
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_PASSWORD=null
+```
+
+### 2. Chạy Redis (Bắt buộc)
+
+Trước khi chạy ứng dụng, bạn cần có Redis server đang chạy. Cách đơn giản nhất là dùng Docker hoặc chạy file `docker-compose.yml` có sẵn:
+
+```bash
+docker-compose up -d redis
+```
+
+### 3. Kiểm tra kết nối
+
+Project có endpoint `/redis-health` để kiểm tra kết nối tới Redis.
+Truy cập: `http://localhost:8000/redis-health`
+Nếu trả về `{"redis_status": "connected"}` là thành công.
+
+### 4. Chạy với Docker (Khuyên dùng)
+
+Dự án đã có sẵn `docker-compose.yml` để chạy cả Backend và Redis.
+
+```bash
+docker-compose up -d --build
+```
+
+Web API sẽ chạy tại: `http://localhost:8000`
+
+### 5. Troubleshooting (Sửa lỗi thường gặp)
+
+* **Lỗi AUTH:** Nếu gặp lỗi `AUTH <password> called without any password`, hãy kiểm tra file `.env` và đảm bảo `REDIS_PASSWORD=null` (hoặc để trống nếu không dùng password).
+* **Lỗi kết nối:** Đảm bảo Docker container `redis` đang chạy (`docker-compose ps`). Nếu chạy local không qua Docker, hãy đảm bảo Redis Server đã được cài và bật ở port 6379.

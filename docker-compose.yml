@@ -9,6 +9,9 @@ services:
       - .env
     environment:
       - REDIS_HOST=redis
+      - DATABASE_URL=sqlite:////code/sql_app.db
+    volumes:
+      - ./sql_app.db:/code/sql_app.db
     depends_on:
       - redis
 

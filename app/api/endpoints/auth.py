@@ -1,3 +1,8 @@
+from jose import jwt
+from app.core.redis_client import redis_client
+import redis.asyncio as redis
+from app.models import user as models
+from app.api.deps import oauth2_scheme, get_current_user
 from datetime import timedelta
 from typing import Any
 
@@ -36,3 +41,35 @@ def login_access_token(
         ),
         "token_type": "bearer",
     }
+
+
+@router.post("/logout")
+async def logout(
+    token: str = Depends(oauth2_scheme),
+    current_user: models.Users = Depends(get_current_user),
+    redis_conn: redis.Redis = Depends(redis_client.get_client)
+):
+    """
+    Logout current user by adding token to blacklist
+    """
+    try:
+        # Decode token to get expiration time
+        payload = jwt.decode(token, settings.SECRET_KEY,
+                             algorithms=[settings.ALGORITHM])
+        exp = payload.get("exp")
+
+        # Calculate TTL
+        import time
+        current_time = int(time.time())
+
+        if exp:
+            ttl = exp - current_time
+            if ttl > 0:
+                # Add to redis blacklist
+                await redis_conn.setex(f"blacklist:{token}", ttl, "true")
+
+        return {"message": "Successfully logged out"}
+
+    except Exception as e:
+        # Trong trường hợp token lỗi nhưng vẫn vào được đây (hiếm), cứ log ra
+        raise HTTPException(status_code=400, detail="Error logging out")
